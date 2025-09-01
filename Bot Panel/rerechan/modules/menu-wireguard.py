@@ -1,0 +1,74 @@
+from rerechan import *
+
+#CREATE IPv4
+@bot.on(events.CallbackQuery(data=b'wg4'))
+async def wg4(event):
+	async def wg4_(event):
+		cmd = 'wg4-bot'.strip()
+		x = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True)
+		print(x)
+		z = subprocess.check_output(cmd, shell=True).decode("utf-8")
+		await event.respond(f"""
+```
+{z}
+```
+**Wireguard Warp Cloudflare IPv4**
+**» @fn_project**
+""",buttons=[[Button.inline("‹ Main Menu ›","menu")]])
+	sender = await event.get_sender()
+	a = valid(str(sender.id))
+	if a == "true":
+		await wg4_(event)
+	else:
+		await event.answer("Access Denied",alert=True)
+
+
+#CREATE IPv6
+@bot.on(events.CallbackQuery(data=b'wg6'))
+async def wg6(event):
+	async def wg6_(event):
+		cmd = 'wg6-bot'.strip()
+		x = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True)
+		print(x)
+		z = subprocess.check_output(cmd, shell=True).decode("utf-8")
+		await event.respond(f"""
+```
+{z}
+```
+**Wireguard Warp Cloudflare IPv4**
+**» @fn_project**
+""",buttons=[[Button.inline("‹ Main Menu ›","menu")]])
+	sender = await event.get_sender()
+	a = valid(str(sender.id))
+	if a == "true":
+		await wg6_(event)
+	else:
+		await event.answer("Access Denied",alert=True)
+
+
+@bot.on(events.CallbackQuery(data=b'menu-wireguard'))
+async def menu_wgf(event):
+    async def menu_wgf_(event):
+        inline = [
+            [Button.inline(" CREATE WGCF IPv4 ", "wg4"),
+             Button.inline(" CREATE WGCF IPv6 ", "wg6")],
+            [Button.inline("‹ Main Menu ›", "menu")]
+        ]
+        
+        z = requests.get(f"http://ip-api.com/json/?fields=country,region,city,timezone,isp").json()
+        msg = f"""
+━━━━━━━━━━━━━━━━━━━━━━━ 
+🟢 » Service: WARP-WIREGUARD
+🟢 » Hostname: `{DOMAIN}`
+🟢 » ISP: {z["isp"]}
+🟢 » Country: {z["country"]}
+━━━━━━━━━━━━━━━━━━━━━━━ 
+"""
+        await event.edit(msg, buttons=inline)
+
+    sender = await event.get_sender()
+    a = valid(str(sender.id))
+    if a == "true":
+        await menu_wgf_(event)
+    else:
+        await event.answer("Access Denied", alert=True)
