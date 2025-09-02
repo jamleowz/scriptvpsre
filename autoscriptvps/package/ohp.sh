@@ -4,9 +4,13 @@
 # Download File Ohp
 
 cd /usr/bin
-wget -O ohp "https://github.com/arjienx/open-http-puncher.git"
-chmod +x /usr/bin/ohp
-
+wget -O ohp.zip "https://raw.githubusercontent.com/arjienx/open-http-puncher/main/ohpserver-linux32.zip"
+YES A | unzip ohp.zip
+rm -fr ohp.zip
+chmod +x *
+cd /usr/bin/ohp
+chmod +x *
+cd
 # Installing Service
 # SSH OHP Port 8181
 cat > /etc/systemd/system/ssh-ohp.service << END
