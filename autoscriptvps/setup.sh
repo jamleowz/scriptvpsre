@@ -147,8 +147,8 @@ clear
 #Mengintall Xray
 cd /etc/xray
 wget -q -O config.json "https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/autoscriptvps/config.json"
-#wget -q -O http.json "https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/http.json"
-#wget -q -O split.json "https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/split.json"
+wget -q -O http.json "https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/http.json"
+wget -q -O split.json "https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/split.json"
 chmod +x /etc/xray/*
 
 # Other
@@ -343,13 +343,13 @@ clear
 cd
 wget -q https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/autoscriptvps/package/vpn.sh/slowdns.sh; chmod +x slowdns.sh; ./slowdns.sh; rm -fr slowdns.sh
 
-# Install Chisel Proxy
+#Install Chisel Proxy
 cd
 wget -q https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/autoscriptvps/package/chisel.sh; chmod +x chisel.sh; ./chisel.sh; rm -fr chisel.sh
 
 #Install Lainya
 cd
-#wget -q https://raw.githubusercontent.com/Rerechan02/UDP/main/udp.sh && chmod +x udp.sh && ./udp.sh
+wget -q https://raw.githubusercontent.com/Rerechan02/UDP/main/udp.sh && chmod +x udp.sh && ./udp.sh
 
 # Install Plugin HideSSH
 cd
@@ -392,50 +392,50 @@ RestartPreventExitStatus=23
 WantedBy=multi-user.target
 END
 
-#cat> /etc/systemd/system/httpupgrade.service << END
-#[Unit]
-#Description=Xray by FunnyVPN
-#Documentation=https://indo-ssh.com
-#After=network.target nss-lookup.target
-#
-#[Service]
-#User=root
-#CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-#AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-#NoNewPrivileges=true
-#ExecStart=/usr/bin/xray -config /etc/xray/http.json
-#Restart=on-failure
-#RestartPreventExitStatus=23
-#
-#[Install]
-#WantedBy=multi-user.target
-#END
-#
-#cat> /etc/systemd/system/splithttp.service << END
-#[Unit]
-#Description=Xray by FunnyVPN
-#Documentation=https://indo-ssh.com
-#After=network.target nss-lookup.target
-#
-#[Service]
-#User=root
-#CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-#AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-#NoNewPrivileges=true
-#ExecStart=/usr/bin/xray -config /etc/xray/split.json
-#Restart=on-failure
-#RestartPreventExitStatus=23
-#
-#[Install]
-#WantedBy=multi-user.target
+cat> /etc/systemd/system/httpupgrade.service << END
+[Unit]
+Description=Xray by FunnyVPN
+Documentation=https://indo-ssh.com
+After=network.target nss-lookup.target
+
+[Service]
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/xray -config /etc/xray/http.json
+Restart=on-failure
+RestartPreventExitStatus=23
+
+[Install]
+WantedBy=multi-user.target
+END
+
+cat> /etc/systemd/system/splithttp.service << END
+[Unit]
+Description=Xray by FunnyVPN
+Documentation=https://indo-ssh.com
+After=network.target nss-lookup.target
+
+[Service]
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/xray -config /etc/xray/split.json
+Restart=on-failure
+RestartPreventExitStatus=23
+
+[Install]
+WantedBy=multi-user.target
 #END
 
-#systemctl enable splithttp
-#systemctl enable httpupgrade
-#systemctl start splithttp
-#systemctl start httpupgrade
-#systemctl restart splithttp
-#systemctl restart httpupgrade
+systemctl enable splithttp
+systemctl enable httpupgrade
+systemctl start splithttp
+systemctl start httpupgrade
+systemctl restart splithttp
+systemctl restart httpupgrade
 
 wget -O /usr/bin/badvpn https://raw.githubusercontent.com/powermx/badvpn/master/badvpn-udpgw64
 chmod +x /usr/bin/badvpn
@@ -459,13 +459,13 @@ WantedBy=multi-user.target
 END
 
 # Seting Up Konfigurasi Badvpn Lainya
-#cd /etc
-#nohup badvpn --listen-addr 127.0.0.1:7100 --max-clients 500 & >/dev/null
-#nohup badvpn --listen-addr 127.0.0.1:7200 --max-clients 500 & >/dev/null
+cd /etc
+nohup badvpn --listen-addr 127.0.0.1:7100 --max-clients 500 & >/dev/null
+nohup badvpn --listen-addr 127.0.0.1:7200 --max-clients 500 & >/dev/null
 #cd
 
-#wget "https://raw.githubusercontent.comjamleowz/PROXY-SSH-OVER-CDN/master/ws-epro/ws-epro" -O /usr/bin/ws-com
-#chmod +x /usr/bin/ws-com
+wget "https://raw.githubusercontent.comjamleowz/PROXY-SSH-OVER-CDN/master/ws-epro/ws-epro" -O /usr/bin/ws-com
+chmod +x /usr/bin/ws-com
 wget -O /usr/bin/config.yaml "https://raw.githubusercontent.com//jamleowz/PROXY-SSH-OVER-CDN/master/ws-epro/config.yml"
 chmod +x /usr/bin/config.yaml
 cat> /etc/systemd/system/proxy.service << END
