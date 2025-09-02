@@ -8,8 +8,8 @@ domain=$(cat /etc/xray/domain)
 
 # Update sistem
 echo "Updating system..."
-#apt update -y
-#apt upgrade -y
+apt update -y
+apt upgrade -y
 
 # Instalasi Tinc
 echo "Installing Tinc..."
@@ -67,33 +67,26 @@ apt install -y android-tools-adb
 adb kill-server
 adb start-server
 
-# Instalasi SSLH
-echo "Installing SSLH..."
+#!/bin/bash
+
+# Instalasi SSLH dari repositori resmi
+echo "Installing SSLH from official repository..."
 apt -y install sslh
-rm -fr /usr/sbin/sslh
-wget -O /usr/sbin/sslh "https://github.com/DindaPutriFN/sslh/releases/download/sslh-mod/sslh"
-chmod +x /usr/sbin/sslh
 
 # Konfigurasi sslh
-rm -f /etc/default/sslh
-cat> /etc/default/sslh << END
+cat > /etc/default/sslh << END
 RUN=yes
 DAEMON=/usr/sbin/sslh
-DAEMON_OPTS="--listen 0.0.0.0:443 --tls 127.0.0.1:777 --http 127.0.0.1:700 --openvpn 127.0.0.1:1194 --xmpp 127.0.0.1:5222 --tinc 127.0.0.1:655 --adb 127.0.0.1:5037 --ssh 127.0.0.1:3303 --anyprot 127.0.0.1:443 --pidfile /var/run/sslh/sslh.pid -n"
+DAEMON_OPTS="--listen 0.0.0.0:443 --tls 127.0.0.1:777 --http 127.0.0.1:700 --openvpn 127.0.0.1:1194 --xmpp 127.0.0.1:5222 --ssh 127.0.0.1:3303 --anyprot 127.0.0.1:443 --pidfile /var/run/sslh/sslh.pid -n"
 END
 
-# Memprbaiki Pid SSLH
-clear
-rm -fr /var/run/sslh
+# Membuat direktori dan file PID dengan izin yang tepat
 mkdir -p /var/run/sslh
-touch /var/run/sslh/sslh.pid
-chmod +x 777 /var/run/sslh/sslh.pid
+chown sslh:sslh /var/run/sslh
 
 # Restart services
 echo "Restarting services..."
 systemctl daemon-reload
-systemctl restart tinc
-systemctl restart ejabberd
 systemctl restart sslh
 
 # Verifikasi instalasi
