@@ -1,40 +1,104 @@
 #!/bin/bash
+# Open Http Puncher
 
-# Secure Installation Script for Chisel (from official sources)
-# By: Your Name
-# Description: Installs and configures a secure Chisel server
+# Download File Ohp
 
-# Memastikan skrip dijalankan sebagai root
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root or with sudo"
-  exit 1
-fi
+cd /usr/bin
+wget -O ohp "https://github.com/arjienx/open-http-puncher.git"
+chmod +x /usr/bin/ohp
 
-# --- CONFIGURATION VARIABLES ---
-# You can change these values to suit your needs
-CHISEL_VERSION="1.9.1" # Check https://github.com/jpillora/chisel/releases for latest
-SSL_PORT="9443"
-HTTP_PORT="8000"
-TLS_CERT="/etc/ssl/private/chisel.crt" # Will generate if not exists
-TLS_KEY="/etc/ssl/private/chisel.key"  # Will generate if not exists
+# Installing Service
+# SSH OHP Port 8181
+cat > /etc/systemd/system/ssh-ohp.service << END
+[Unit]
+Description=SSH OHP Redirection Service
+Documentation=t.me/fn_project
+After=network.target nss-lookup.target
 
-# --- OFFICIAL DOWNLOAD URL ---
-# Constructing the official download URL for the latest version
-ARCH=$(uname -m)
-case $ARCH in
-  "x86_64")
-    ARCH="amd64"
-    ;;
-  "aarch64"|"arm64")
-    ARCH="arm64"
-    ;;
-  *)
-    echo "Unsupported architecture: $ARCH"
-    exit 1
-    ;;
-esac
+[Service]
+Type=simple
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/ohp -port 8181 -proxy 127.0.0.1:8888 -tunnel 127.0.0.1:22
+Restart=on-failure
+LimitNOFILE=infinity
 
-# Official GitHub release URL
+[Install]
+WantedBy=multi-user.target
+END
+
+# Dropbear OHP 8282
+cat > /etc/systemd/system/dropbear-ohp.service << END
+[Unit]]
+Description=Dropbear OHP Redirection Service
+Documentation=https://t.me/fn_project
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/ohp -port 8282 -proxy 127.0.0.1:8888 -tunnel 127.0.0.1:143
+Restart=on-failure
+LimitNOFILE=infinity
+
+[Install]
+WantedBy=multi-user.target
+END
+
+# OpenVPN OHP 8383
+cat > /etc/systemd/system/openvpn-ohp.service << END
+[Unit]]
+Description=OpenVPN OHP Redirection Service
+Documentation=t.me/fn_project
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/ohp -port 8383 -proxy 127.0.0.1:8888 -tunnel 127.0.0.1:1194
+Restart=on-failure
+LimitNOFILE=infinity
+
+[Install]
+WantedBy=multi-user.target
+END
+
+sudo iptables -A INPUT -p tcp --dport 8181 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8282 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8383 -j ACCEPT
+sudo ufw allow 8383/tcp
+sudo ufw allow 8181/tcp
+sudo ufw allow 8282/tcp
+
+# Daemon
+systemctl daemon-reload
+
+# Enable
+systemctl enable ssh-ohp
+systemctl enable dropbear-ohp
+systemctl enable openvpn-ohp
+
+# Firewall
+sudo iptables -A INPUT -p tcp --dport 8181 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8282 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 8383 -j ACCEPT
+sudo ufw allow 8383/tcp
+sudo ufw allow 8181/tcp
+sudo ufw allow 8282/tcp
+
+# Restart
+systemctl restart openvpn-ohp
+systemctl restart dropbear-ohp
+systemctl restart ssh-ohp
+clear# Official GitHub release URL
 URL="https://github.com/jpillora/chisel/releases/download/v${CHISEL_VERSION}/chisel_${CHISEL_VERSION}_linux_${ARCH}.gz"
 
 echo "Downloading Chisel v${CHISEL_VERSION} from official GitHub release..."
