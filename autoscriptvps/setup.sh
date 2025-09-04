@@ -10,12 +10,12 @@
 #link="https://raw.githubusercontent.com/DindaPutriFN/DindaPutriFN/main/api"
 clear
 #echo "Port 22
-Port 3303
-#Port 53" >> /etc/ssh/sshd_config
-#systemctl stop systemd-resolved
+Port 222
+Port 222" >> /etc/ssh/sshd_config
+systemctl stop systemd-resolved
 systemctl restart ssh
 systemctl restart sshd
-#systemctl start systemd-resolved
+systemctl start systemd-resolved
 clear
 [[ -e $(which curl) ]] && if [[ -z $(cat /etc/resolv.conf | grep "1.1.1.1") ]]; then cat <(echo "nameserver 1.1.1.1") /etc/resolv.conf > /etc/resolv.conf.tmp && mv /etc/resolv.conf.tmp /etc/resolv.conf; fi
 clear
@@ -35,12 +35,12 @@ clear
 
 #domain
 read -rp "Masukkan Domain: " domain
-#read -p "Nameserver: " nsdomain
-#read -p "Api Bot Token: " api
-#read -p "Admin ID Telegram: " id
-#echo "$api" > /etc/funny/.keybot
-#echo "$id" > /etc/funny/.chatid
-#echo "$nsdomain" >/etc/slowdns/nsdomain
+read -p "Nameserver: " nsdomain
+read -p "Api Bot Token: " api
+read -p "Admin ID Telegram: " id
+echo "$api" > /etc/funny/.keybot
+echo "$id" > /etc/funny/.chatid
+echo "$nsdomain" >/etc/slowdns/nsdomain
 echo "$domain" > /etc/xray/domain
 
 #Key
@@ -50,7 +50,7 @@ chmod +x /etc/xray/.key
 api773=$(cat /etc/xray/.key)
 
 #email
-#read -rp "Masukkan Email anda: " email
+read -rp "Masukkan Email anda: " email
 
 #Preparation
 clear
@@ -153,7 +153,7 @@ chmod +x /etc/xray/*
 
 # Other
 cd /usr/bin
-wget -q -O m.zip "https://github.com/jamleowz/scriptvpsre/raw/main/autoscriptvps/menu/menu.zip"
+wget -q -O m.zip "https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/m.zip"
 yes A | unzip m.zip
 rm -fr m.zip
 chmod +x *
@@ -192,7 +192,7 @@ timedatectl set-timezone Asia/Jakarta;
 
 #install latest xray
 cd /usr/bin
-wget -q https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/xray.sh
+wget -q "https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/xray.sh"
 #yes A | unzip xray.zip ; rm -fr xray.zip
 chmod +x xray.sh
 ./xray.sh
@@ -232,9 +232,9 @@ rm -fr cloudflared-linux-amd64.deb
 # Menginstall Nodejs
 apt install nodejs -y
 
-#Install Speedtest
-#curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
-#sudo apt-get install speedtest -y
+Install Speedtest
+curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+sudo apt-get install speedtest -y
 
 #install nginx
 apt install nginx -y
@@ -275,9 +275,9 @@ apt install socat cron bash-completion -y
 apt install ufw -y
 
 # swap ram 2gb
-#wget https://raw.githubusercontent.com/Cretezy/Swap/master/swap.sh -O swap
-#sh swap 2G
-#rm swap
+wget https://raw.githubusercontent.com/Cretezy/Swap/master/swap.sh -O swap
+sh swap 2G
+rm swap
 
 # Make Other
 touch /etc/xray/proxy.log
@@ -341,7 +341,7 @@ clear
 
 # Install Slowdns
 cd
-wget -q https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/autoscriptvps/package/vpn.sh/slowdns.sh; chmod +x slowdns.sh; ./slowdns.sh; rm -fr slowdns.sh
+wget -q https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/autoscriptvps/package/slowdns.sh; chmod +x slowdns.sh; ./slowdns.sh; rm -fr slowdns.sh
 
 #Install Chisel Proxy
 cd
@@ -349,7 +349,7 @@ wget -q https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/autoscriptvp
 
 #Install Lainya
 cd
-wget -q https://raw.githubusercontent.com/Rerechan02/UDP/main/udp.sh && chmod +x udp.sh && ./udp.sh
+wget -q https://raw.githubusercontent.com/jamleowz/scriptvpsre/main/autoscriptvps/package/udp.sh && chmod +x udp.sh && ./udp.sh
 
 # Install Plugin HideSSH
 cd
